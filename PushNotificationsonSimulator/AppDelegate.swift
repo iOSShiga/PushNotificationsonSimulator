@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        configureNotification()
+        
         return true
     }
 
@@ -35,3 +39,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+
+
+extension AppDelegate {
+    
+    func configureNotification()  {
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .badge, .alert]) { (grant, error) in
+            print(grant)
+            UNUserNotificationCenter.current().delegate = self
+            
+            self.setNotificationCategories()
+            
+        }
+    }
+    
+    
+    func setNotificationCategories()  {
+        
+        let openHomePage = UNNotificationAction(identifier: UNNotificationDefaultActionIdentifier, title: "Open Home Page", options: UNNotificationActionOptions.foreground)
+        
+        let contentAddedCategory = UNNotificationCategory(identifier: "CustomSimplePush", actions: [openHomePage], intentIdentifiers: [], hiddenPreviewsBodyPlaceholder: "", options: UNNotificationCategoryOptions.customDismissAction)
+        
+        UNUserNotificationCenter.current().setNotificationCategories([contentAddedCategory])
+        
+        
+    }
+    
+}
+
+
+extension AppDelegate: UNUserNotificationCenterDelegate  {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        completionHandler([.sound, .alert, .badge])
+    }
+}
