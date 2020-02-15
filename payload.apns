@@ -1,0 +1,15 @@
+
+{
+     "aps":{
+         "alert": {
+        "title":"Test Notification on Simulator",
+        "body": "Working!!!🤩🤩🤩",
+         },
+        "badge":1,
+        "sound":"default",
+        "category":"CustomSimplePush",
+        "mutable-content":"1",
+     },
+     "Simulator Target Bundle": "com.Shigas.PushNotificationsonSimulator",
+     "urlImageString":"https://res.cloudinary.com/demo/image/upload/sample.jpg"
+}
