@@ -46,13 +46,33 @@ extension AppDelegate {
     func configureNotification()  {
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .badge, .alert]) { (grant, error) in
+            
             print(grant)
+            
             UNUserNotificationCenter.current().delegate = self
             
+            self.getNotificationSettings()
             self.setNotificationCategories()
             
         }
     }
+    
+    func getNotificationSettings()  {
+           UNUserNotificationCenter.current().getNotificationSettings { (settngs) in
+               switch settngs.soundSetting {
+               case .enabled:
+                   print("enabled sound setting")
+                   
+               case .disabled:
+                   print("setting has been disabled")
+                   
+               case .notSupported:
+                   print("somwthing vital went wrong here")
+               @unknown default:
+                   print("default")
+               }
+           }
+       }
     
     
     func setNotificationCategories()  {
@@ -75,4 +95,25 @@ extension AppDelegate: UNUserNotificationCenterDelegate  {
         
         completionHandler([.sound, .alert, .badge])
     }
+    
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                       didReceive response: UNNotificationResponse,
+                                       withCompletionHandler completionHandler: @escaping () -> Void) {
+               switch response.actionIdentifier {
+               case UNNotificationDismissActionIdentifier:
+                   print("Dismiss Action")
+               case UNNotificationDefaultActionIdentifier:
+                   print("Open Action")
+               case "Snooze":
+                   print("Snooze")
+               case "Delete":
+                   print("Delete")
+               default:
+                   print("default")
+               }
+               completionHandler()
+           }
+    
+    
 }
